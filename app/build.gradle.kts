@@ -1,6 +1,13 @@
+buildscript {
+    dependencies {
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.7.6")
+    }
+}
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("androidx.navigation.safeargs")
 }
 
 android {
@@ -30,9 +37,18 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
+    // View Binding
+    implementation("com.github.kirich1409:viewbindingpropertydelegate-full:1.5.9")
+    // Navigation
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
+    // Dependency Injection
+    implementation("io.insert-koin:koin-android:3.4.1")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

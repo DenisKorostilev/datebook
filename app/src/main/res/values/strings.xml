@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">datebook</string>
+    <string name="mainText">Запланировать дело</string>
+    <string name="dateStart">10:00</string>
+    <string name="dateFinish">11:00</string>
+    <string name="events">Ваши мероприятия</string>
+    <string name="time">Запланированное время</string>
+    <string name="dash">—</string>
 </resources>
