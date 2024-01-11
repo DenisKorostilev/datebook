@@ -49,6 +49,10 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
     // Dependency Injection
     implementation("io.insert-koin:koin-android:3.4.1")
+    // AdapterDelegates
+    implementation("com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding:4.3.2")
+    // DateTime
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
