@@ -6,9 +6,16 @@
     app:startDestination="@id/eventsFragment">
     <fragment
         android:id="@+id/eventsFragment"
-        android:name="com.example.datebook.presentation.EventsFragment"
+        android:name="com.example.datebook.presentation.fragment.EventsFragment"
         android:label="events_fragment"
-        tools:layout="@layout/events_fragment" >
+        tools:layout="@layout/events_fragment">
+        <action
+            android:id="@+id/action_eventsFragment_to_eventsDetailsFragment"
+            app:destination="@id/eventsDetailsFragment" />
     </fragment>
-
+    <fragment
+        android:id="@+id/eventsDetailsFragment"
+        android:name="com.example.datebook.presentation.fragment.EventsDetailFragment"
+        android:label="EventsDetailsFragment"
+        tools:layout="@layout/events_detail_fragment" />
 </navigation>
