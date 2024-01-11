@@ -6,4 +6,5 @@
     <string name="events">Ваши мероприятия</string>
     <string name="time">Запланированное время</string>
     <string name="dash">—</string>
+    <string name="event">Мероприятие</string>
 </resources>
