@@ -1,4 +1,4 @@
-package com.example.datebook.data
+package com.example.datebook.data.repository
 
 import com.example.datebook.domain.Event
 import com.example.datebook.domain.NetworkResult

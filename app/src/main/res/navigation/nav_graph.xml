@@ -7,15 +7,27 @@
     <fragment
         android:id="@+id/eventsFragment"
         android:name="com.example.datebook.presentation.fragment.EventsFragment"
-        android:label="events_fragment"
+        android:label="eventsFragment"
         tools:layout="@layout/events_fragment">
         <action
-            android:id="@+id/action_eventsFragment_to_eventsDetailsFragment"
-            app:destination="@id/eventsDetailsFragment" />
+            android:id="@+id/action_eventsFragment_to_eventsDetailFragment"
+            app:destination="@id/eventsDetailFragment" />
     </fragment>
     <fragment
-        android:id="@+id/eventsDetailsFragment"
+        android:id="@+id/eventsDetailFragment"
         android:name="com.example.datebook.presentation.fragment.EventsDetailFragment"
-        android:label="EventsDetailsFragment"
-        tools:layout="@layout/events_detail_fragment" />
+        android:label="EventsDetailFragment"
+        tools:layout="@layout/events_detail_fragment">
+        <argument
+            android:name="eventUI"
+            app:argType="com.example.datebook.presentation.EventUI"
+            app:nullable="false" />
+        <argument
+            android:name="date"
+            app:argType="java.lang.Long"
+            app:nullable="false" />
+        <action
+            android:id="@+id/action_eventsDetailFragment_to_eventsFragment"
+            app:destination="@id/eventsFragment" />
+    </fragment>
 </navigation>
