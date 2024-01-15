@@ -1,7 +1,7 @@
 package com.example.datebook.data
 
 data class EventsDTO(
-    var events: List<EventDTO>,
+    var events: List<EventDTO>
 )
 
 data class EventDTO(
@@ -9,5 +9,5 @@ data class EventDTO(
     val dateStart: Long,
     val dateFinish: Long,
     val name: String,
-    val description: String,
+    val description: String
 )

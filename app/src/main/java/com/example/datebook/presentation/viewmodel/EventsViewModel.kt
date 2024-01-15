@@ -2,6 +2,7 @@ package com.example.datebook.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.datebook.data.repository.LocalRepositoryImpl
 import com.example.datebook.domain.EventInteractor
 import com.example.datebook.domain.NetworkResult
 import com.example.datebook.presentation.EventMapper
@@ -22,6 +23,7 @@ sealed interface NavigationEvent {
 class EventsViewModel(
     private val eventsInteractor: EventInteractor,
     private val mapper: EventMapper,
+    private val localRepositoryImpl: LocalRepositoryImpl
 ) : ViewModel() {
     private var allEvents: List<EventUI> = emptyList()
 
@@ -66,7 +68,10 @@ class EventsViewModel(
         }
         _currentEvent.value = null
         _currentEvents.value = changedEvents
-        viewModelScope.launch { _navigationItem.emit(NavigationEvent.Back) }
+        viewModelScope.launch {
+            _navigationItem.emit(NavigationEvent.Back)
+            localRepositoryImpl.updateEvents(changedEvents)
+        }
     }
 
     fun onEventClicked(eventUI: EventUI) {

@@ -1,6 +1,6 @@
 package com.example.datebook
 
-import org.junit.Assert.*
+import org.junit.Assert.* // ktlint-disable
 import org.junit.Test
 
 /**

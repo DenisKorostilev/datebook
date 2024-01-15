@@ -7,7 +7,7 @@ import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 
 object MainDelegates {
     fun eventsItemsDelegates(itemClickedListener: (EventUI) -> Unit) = adapterDelegateViewBinding<EventUI, ListItem, EventItemBinding>(
-        { inflater, container -> EventItemBinding.inflate(inflater, container, false) },
+        { inflater, container -> EventItemBinding.inflate(inflater, container, false) }
     ) {
         with(binding) {
             root.setOnClickListener { itemClickedListener(item) }

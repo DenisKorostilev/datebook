@@ -12,4 +12,7 @@ interface EventDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun cacheEvents(vararg events: EventEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateEvents(vararg events: EventEntity)
 }
