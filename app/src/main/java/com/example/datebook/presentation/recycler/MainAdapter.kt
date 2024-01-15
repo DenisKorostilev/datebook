@@ -5,7 +5,7 @@ import com.example.datebook.presentation.ListItem
 import com.hannesdorfmann.adapterdelegates4.AsyncListDifferDelegationAdapter
 
 class MainAdapter(
-    clickListener: (EventUI) -> Unit,
+    clickListener: (EventUI) -> Unit
 ) : AsyncListDifferDelegationAdapter<ListItem>(DiffUtils()) {
 
     init {

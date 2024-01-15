@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
 @Database(
     entities = [EventEntity::class],
     version = 1,
-    exportSchema = false,
+    exportSchema = false
 )
 abstract class EventsDataBase : RoomDatabase() {
     abstract fun eventsDao(): EventDao
@@ -18,7 +18,7 @@ abstract class EventsDataBase : RoomDatabase() {
             return Room.databaseBuilder(
                 context,
                 EventsDataBase::class.java,
-                "localDataBase",
+                "localDataBase"
             ).build()
         }
     }

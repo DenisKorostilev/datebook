@@ -5,7 +5,7 @@ import com.example.datebook.data.repository.LocalRepository
 
 class EventMockInteractor(
     private val eventRepository: EventRepository,
-    private val localRepository: LocalRepository,
+    private val localRepository: LocalRepository
 ) : EventInteractor {
     override suspend fun getEventsData(): NetworkResult<List<Event>> {
         val events = localRepository.readEvents()

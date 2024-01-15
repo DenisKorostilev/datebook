@@ -9,5 +9,5 @@ data class EventEntity(
     val dateStart: Long,
     val dateFinish: Long,
     val name: String,
-    val description: String,
+    val description: String
 )

@@ -23,15 +23,13 @@ class EventsFragment : Fragment(R.layout.events_fragment) {
     private val adapterDelegate = MainAdapter { eventUI -> eventsViewModel.onEventClicked(eventUI) }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        with(binding) {
-            recyclerView.adapter = adapterDelegate
-            calendar.setOnDateChangeListener { _, year: Int, month: Int, dayOfMonth: Int ->
-                val calendar: Calendar = Calendar.getInstance()
-                calendar.set(year, month, dayOfMonth)
-                eventsViewModel.setCurrentDate(calendar.timeInMillis)
-                eventsViewModel.receiveEvents()
-            }
-        }
+        bindViews()
+        calendarInteraction()
+        navigation()
+    }
+
+    private fun bindViews() {
+        binding.recyclerView.adapter = adapterDelegate
         viewLifecycleOwner.lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 eventsViewModel.currentEvents.collect { events ->
@@ -46,6 +44,9 @@ class EventsFragment : Fragment(R.layout.events_fragment) {
                 }
             }
         }
+    }
+
+    private fun navigation() {
         viewLifecycleOwner.lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 eventsViewModel.navigationItem.collect { item ->
@@ -58,12 +59,21 @@ class EventsFragment : Fragment(R.layout.events_fragment) {
         }
     }
 
+    private fun calendarInteraction() {
+        binding.calendar.setOnDateChangeListener { _, year: Int, month: Int, dayOfMonth: Int ->
+            val calendar: Calendar = Calendar.getInstance()
+            calendar.set(year, month, dayOfMonth)
+            eventsViewModel.setCurrentDate(calendar.timeInMillis)
+            eventsViewModel.receiveEvents()
+        }
+    }
+
     private fun moveToEventsDetailsFragment(navigation: NavigationEvent.Details) {
         findNavController().navigate(
             EventsFragmentDirections.actionEventsFragmentToEventsDetailFragment(
                 navigation.eventUI,
-                navigation.date,
-            ),
+                navigation.date
+            )
         )
     }
 }

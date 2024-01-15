@@ -9,7 +9,7 @@ data class EventUI(
     val dateStart: String,
     val dateFinish: String,
     val name: String,
-    val description: String,
+    val description: String
 ) : ListItem, Parcelable {
     override val itemId: String = id
 }

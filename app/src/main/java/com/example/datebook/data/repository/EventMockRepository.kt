@@ -7,7 +7,7 @@ import com.example.datebook.domain.NetworkResult
 
 class EventMockRepository(
     private val eventsApi: EventsApi,
-    private val mapper: EventDTOMapper,
+    private val mapper: EventDTOMapper
 ) : EventRepository {
     override suspend fun getEventsData(): NetworkResult<List<Event>> {
         val result = eventsApi.getEventsResults()

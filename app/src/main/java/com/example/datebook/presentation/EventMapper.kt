@@ -16,7 +16,7 @@ class EventMapper : BaseMapper<Event, EventUI> {
             dateStart = dateStartFormatted,
             dateFinish = dateFinishFormatted,
             name = from.name,
-            description = from.description,
+            description = from.description
         )
     }
 }
