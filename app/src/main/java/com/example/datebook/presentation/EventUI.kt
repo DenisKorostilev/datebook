@@ -1,6 +1,7 @@
 package com.example.datebook.presentation
 
 import android.os.Parcelable
+import com.example.datebook.presentation.recycler.ListItem
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
