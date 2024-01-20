@@ -3,17 +3,16 @@ package com.example.datebook.presentation.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.datebook.R
 import com.example.datebook.databinding.EventsFragmentBinding
+import com.example.datebook.presentation.launchRepeatedly
 import com.example.datebook.presentation.recycler.MainAdapter
 import com.example.datebook.presentation.viewmodel.EventsViewModel
 import com.example.datebook.presentation.viewmodel.NavigationEvent
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.Calendar
 
@@ -25,37 +24,25 @@ class EventsFragment : Fragment(R.layout.events_fragment) {
         super.onViewCreated(view, savedInstanceState)
         bindViews()
         calendarInteraction()
-        navigation()
     }
 
     private fun bindViews() {
         binding.recyclerView.adapter = adapterDelegate
-        viewLifecycleOwner.lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                eventsViewModel.currentEvents.collect { events ->
-                    adapterDelegate.items = events
-                }
-            }
-        }
-        viewLifecycleOwner.lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                eventsViewModel.currentDate.collect { date ->
-                    binding.calendar.date = date
-                }
-            }
-        }
-    }
+        viewLifecycleOwner.launchRepeatedly {
+            eventsViewModel.currentEvents.onEach { events ->
+                adapterDelegate.items = events
+            }.launchIn(this)
 
-    private fun navigation() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                eventsViewModel.navigationItem.collect { item ->
-                    when (item) {
-                        is NavigationEvent.Details -> moveToEventsDetailsFragment(item)
-                        is NavigationEvent.Back -> findNavController().popBackStack()
-                    }
+            eventsViewModel.currentDate.onEach { date ->
+                binding.calendar.date = date
+            }.launchIn(this)
+
+            eventsViewModel.navigationItem.onEach { item ->
+                when (item) {
+                    is NavigationEvent.Details -> moveToEventsDetailsFragment(item)
+                    is NavigationEvent.Back -> findNavController().popBackStack()
                 }
-            }
+            }.launchIn(this)
         }
     }
 

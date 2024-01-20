@@ -2,7 +2,6 @@ package com.example.datebook.presentation.recycler
 
 import com.example.datebook.databinding.EventItemBinding
 import com.example.datebook.presentation.EventUI
-import com.example.datebook.presentation.ListItem
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 
 object MainDelegates {

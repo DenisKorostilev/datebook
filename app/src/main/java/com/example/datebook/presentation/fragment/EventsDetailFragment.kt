@@ -4,17 +4,16 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.datebook.R
 import com.example.datebook.databinding.EventsDetailFragmentBinding
+import com.example.datebook.presentation.launchRepeatedly
 import com.example.datebook.presentation.viewmodel.EventsViewModel
 import com.example.datebook.presentation.viewmodel.NavigationEvent
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDateTime
@@ -71,15 +70,13 @@ class EventsDetailFragment : Fragment(R.layout.events_detail_fragment) {
     }
 
     private fun navigation() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                eventsViewModel.navigationItem.collect { item ->
-                    when (item) {
-                        is NavigationEvent.Details -> Unit
-                        is NavigationEvent.Back -> findNavController().popBackStack()
-                    }
+        viewLifecycleOwner.launchRepeatedly {
+            eventsViewModel.navigationItem.onEach { item ->
+                when (item) {
+                    is NavigationEvent.Details -> Unit
+                    is NavigationEvent.Back -> findNavController().popBackStack()
                 }
-            }
+            }.launchIn(this)
         }
     }
 }

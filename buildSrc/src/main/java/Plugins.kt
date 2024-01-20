@@ -9,7 +9,7 @@ object Plugins {
 
     object Versions {
         const val navGradle = "2.7.6"
-        const val application = "8.1.1"
+        const val application = "8.2.0"
         const val jetBrains = "1.9.21"
         const val navSaveArgs = "2.5.3"
         const val ksp = "1.9.21-1.0.15"

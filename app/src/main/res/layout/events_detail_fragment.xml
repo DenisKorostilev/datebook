@@ -7,7 +7,7 @@
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/green"
+        android:background="@color/purple"
         android:orientation="horizontal"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -19,15 +19,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/event"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textColor="@color/black"
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/revert"
             android:layout_width="30dp"
             android:layout_height="40dp"
             android:layout_gravity="top|start"
-            android:backgroundTint="@color/green"
+            android:backgroundTint="@color/purple"
             android:drawableBottom="@drawable/revert" />
 
         <Button
@@ -35,74 +35,78 @@
             android:layout_width="30dp"
             android:layout_height="40dp"
             android:layout_gravity="top|end"
-            android:backgroundTint="@color/green"
+            android:backgroundTint="@color/purple"
             android:drawableBottom="@drawable/mark" />
     </FrameLayout>
 
-    <EditText
-        android:id="@+id/titleTask"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/boxTitle"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/appBar" />
+        android:paddingTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appBar">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/titleTask"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/titleTask"
+            android:inputType="textCapSentences"
+            android:textSize="18sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/dateTime"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@drawable/separator"
-
         android:gravity="center"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleTask" />
+        app:layout_constraintTop_toBottomOf="@id/boxTitle" />
 
     <TextView
         android:id="@+id/detailsDateStart"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@drawable/separator"
+        android:layout_width="205dp"
+        android:layout_height="48dp"
         android:gravity="center"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/detailsDateFinish"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dateTime" />
 
-
     <TextView
         android:id="@+id/detailsDateFinish"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@drawable/separator"
+        android:layout_width="205dp"
+        android:layout_height="48dp"
         android:gravity="center"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/detailsDateStart" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintTop_toBottomOf="@+id/dateTime" />
 
-
-    <EditText
-        android:id="@+id/description"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/boxDescription"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/detailsDateFinish" />
+        app:layout_constraintTop_toBottomOf="@id/detailsDateFinish">
 
-    <TextView
-        android:id="@+id/descriptionText"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:text=""
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/description" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/description"
+            android:textSize="18sp" />
 
+    </com.google.android.material.textfield.TextInputLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
