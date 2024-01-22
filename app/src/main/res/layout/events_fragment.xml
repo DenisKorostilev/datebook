@@ -10,8 +10,19 @@
         android:id="@+id/calendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/addEvent"
+        android:layout_width="@dimen/margin50"
+        android:layout_height="60dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/white"
+        android:drawableBottom="@drawable/add"
+        app:layout_constraintBottom_toBottomOf="@+id/calendar"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <LinearLayout
         android:id="@+id/title"
@@ -19,31 +30,30 @@
         android:layout_height="wrap_content"
         android:background="@drawable/separator_title"
         android:orientation="horizontal"
-        android:padding="10dp"
-        app:layout_constraintBottom_toTopOf="@id/recyclerView"
+        android:padding="@dimen/padding10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/calendar">
 
         <TextView
-            android:id="@+id/myTask"
-            android:layout_width="0dp"
+            android:id="@+id/myTasks"
+            android:layout_width="@dimen/width0"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="@dimen/weight1"
             android:gravity="center"
             android:text="@string/events"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="@dimen/textSize16" />
 
         <TextView
-            android:id="@+id/time"
-            android:layout_width="0dp"
+            android:id="@+id/scheduledTime"
+            android:layout_width="@dimen/width0"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="@dimen/weight1"
             android:gravity="center"
             android:text="@string/time"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="@dimen/textSize16" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -56,5 +66,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title"
         tools:listitem="@layout/event_item" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

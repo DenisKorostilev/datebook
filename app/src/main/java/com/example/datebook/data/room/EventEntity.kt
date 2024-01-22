@@ -8,6 +8,8 @@ data class EventEntity(
     @PrimaryKey val id: String,
     val dateStart: Long,
     val dateFinish: Long,
+    val date: String,
     val name: String,
     val description: String
+
 )

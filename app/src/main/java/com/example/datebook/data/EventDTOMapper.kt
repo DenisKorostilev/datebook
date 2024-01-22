@@ -12,6 +12,7 @@ class EventDTOMapper : BaseMapper<EventDTO, Event> {
             id = from.id,
             dateStart = Instant.fromEpochSeconds(from.dateStart).toLocalDateTime(TimeZone.UTC),
             dateFinish = Instant.fromEpochSeconds(from.dateFinish).toLocalDateTime(TimeZone.UTC),
+            date = from.date,
             name = from.name,
             description = from.description
         )

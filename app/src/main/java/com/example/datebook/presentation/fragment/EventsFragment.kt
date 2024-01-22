@@ -24,6 +24,7 @@ class EventsFragment : Fragment(R.layout.events_fragment) {
         super.onViewCreated(view, savedInstanceState)
         bindViews()
         calendarInteraction()
+        onButtonClick()
     }
 
     private fun bindViews() {
@@ -39,10 +40,16 @@ class EventsFragment : Fragment(R.layout.events_fragment) {
 
             eventsViewModel.navigationItem.onEach { item ->
                 when (item) {
-                    is NavigationEvent.Details -> moveToEventsDetailsFragment(item)
+                    is NavigationEvent.Details -> moveToEventsDetailFragment(item)
                     is NavigationEvent.Back -> findNavController().popBackStack()
                 }
             }.launchIn(this)
+        }
+    }
+
+    private fun onButtonClick() {
+        binding.addEvent.setOnClickListener {
+            moveToAddEventFragment()
         }
     }
 
@@ -51,16 +58,20 @@ class EventsFragment : Fragment(R.layout.events_fragment) {
             val calendar: Calendar = Calendar.getInstance()
             calendar.set(year, month, dayOfMonth)
             eventsViewModel.setCurrentDate(calendar.timeInMillis)
-            eventsViewModel.receiveEvents()
         }
     }
 
-    private fun moveToEventsDetailsFragment(navigation: NavigationEvent.Details) {
+    private fun moveToEventsDetailFragment(navigation: NavigationEvent.Details) {
         findNavController().navigate(
             EventsFragmentDirections.actionEventsFragmentToEventsDetailFragment(
-                navigation.eventUI,
-                navigation.date
+                navigation.eventUI
             )
+        )
+    }
+
+    private fun moveToAddEventFragment() {
+        findNavController().navigate(
+            EventsFragmentDirections.actionEventsFragmentToCreateEventsFragment()
         )
     }
 }

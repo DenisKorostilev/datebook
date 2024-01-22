@@ -17,14 +17,17 @@ import java.time.format.DateTimeFormatter
 class LocalRepositoryImpl(
     private val eventDao: EventDao
 ) : LocalRepository {
-    override suspend fun readEvents(): List<Event> {
-        return eventDao.readEvents().map { entity ->
+    override suspend fun readEvents(date: String): List<Event> {
+        return eventDao.readEvents().filter { entity ->
+            entity.date == date
+        }.map { entity ->
             Event(
                 id = entity.id,
                 dateStart = Instant.fromEpochSeconds(entity.dateStart).toLocalDateTime(TimeZone.UTC),
                 dateFinish = Instant.fromEpochSeconds(entity.dateFinish).toLocalDateTime(TimeZone.UTC),
                 name = entity.name,
-                description = entity.description
+                description = entity.description,
+                date = entity.date
             )
         }
     }
@@ -36,7 +39,8 @@ class LocalRepositoryImpl(
                 dateStart = event.dateStart.toInstant(TimeZone.UTC).epochSeconds,
                 dateFinish = event.dateFinish.toInstant(TimeZone.UTC).epochSeconds,
                 name = event.name,
-                description = event.description
+                description = event.description,
+                date = event.date
             )
         }.toTypedArray()
         eventDao.cacheEvents(events = entities)
@@ -49,21 +53,45 @@ class LocalRepositoryImpl(
                 dateStart = LocalDateTime.of(
                     LocalDate.now(),
                     LocalTime.parse(
-                        event.dateStart,
+                        event.timeStart,
                         DateTimeFormatter.ofPattern("HH:mm")
                     )
                 ).atZone(ZoneId.systemDefault()).toInstant().epochSecond,
-                dateFinish = LocalDateTime.of(
-                    LocalDate.now(),
-                    LocalTime.parse(
-                        event.dateFinish,
-                        DateTimeFormatter.ofPattern("HH:mm")
-                    )
-                ).atZone(ZoneId.systemDefault()).toInstant().epochSecond,
+                dateFinish = LocalDateTime.of(LocalDate.now(), LocalTime.parse(event.timeFinish, DateTimeFormatter.ofPattern("HH:mm")))
+                    .atZone(ZoneId.systemDefault()).toInstant().epochSecond,
                 name = event.name,
-                description = event.description
+                description = event.description,
+                date = event.date
             )
         }.toTypedArray()
         eventDao.updateEvents(events = entities)
+    }
+
+    override suspend fun addEvent(event: EventUI) {
+        val entities = EventEntity(
+            id = event.id,
+            dateStart = LocalDateTime.of(LocalDate.now(), LocalTime.parse(event.timeStart, DateTimeFormatter.ofPattern("HH:mm")))
+                .atZone(ZoneId.systemDefault()).toInstant().epochSecond,
+            name = event.name,
+            description = event.description,
+            dateFinish = LocalDateTime.of(LocalDate.now(), LocalTime.parse(event.timeFinish, DateTimeFormatter.ofPattern("HH:mm")))
+                .atZone(ZoneId.systemDefault()).toInstant().epochSecond,
+            date = event.date
+        )
+        eventDao.addEvent(event = entities)
+    }
+
+    override suspend fun deleteEvent(event: EventUI) {
+        val entities = EventEntity(
+            id = event.id,
+            dateStart = LocalDateTime.of(LocalDate.now(), LocalTime.parse(event.timeStart, DateTimeFormatter.ofPattern("HH:mm")))
+                .atZone(ZoneId.systemDefault()).toInstant().epochSecond,
+            dateFinish = LocalDateTime.of(LocalDate.now(), LocalTime.parse(event.timeFinish, DateTimeFormatter.ofPattern("HH:mm")))
+                .atZone(ZoneId.systemDefault()).toInstant().epochSecond,
+            date = event.date,
+            name = event.name,
+            description = event.description
+        )
+        eventDao.deleteEvent(event = entities)
     }
 }

@@ -5,14 +5,15 @@ import com.example.datebook.presentation.EventUI
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 
 object MainDelegates {
-    fun eventsItemsDelegates(itemClickedListener: (EventUI) -> Unit) = adapterDelegateViewBinding<EventUI, ListItem, EventItemBinding>(
+    fun eventItemsDelegates(itemClickedListener: (EventUI) -> Unit) = adapterDelegateViewBinding<EventUI, ListItem, EventItemBinding>(
         { inflater, container -> EventItemBinding.inflate(inflater, container, false) }
     ) {
         with(binding) {
             root.setOnClickListener { itemClickedListener(item) }
             bind {
-                dateStart.text = item.dateStart
-                dateFinish.text = item.dateFinish
+                dateStart.text = item.timeStart
+                dateFinish.text = item.timeFinish
+                date.text = item.date
                 name.text = item.name
             }
         }

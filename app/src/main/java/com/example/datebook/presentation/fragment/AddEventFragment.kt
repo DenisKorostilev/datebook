@@ -9,10 +9,10 @@ import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.datebook.R
-import com.example.datebook.databinding.EventsDetailFragmentBinding
+import com.example.datebook.databinding.AddEventFragmentBinding
+import com.example.datebook.presentation.EventUI
 import com.example.datebook.presentation.launchRepeatedly
 import com.example.datebook.presentation.viewmodel.EventsViewModel
 import com.example.datebook.presentation.viewmodel.NavigationEvent
@@ -23,41 +23,30 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class EventsDetailFragment : Fragment(R.layout.events_detail_fragment) {
-    private val binding: EventsDetailFragmentBinding by viewBinding()
-    private val arguments: EventsDetailFragmentArgs by navArgs()
+class AddEventFragment : Fragment(R.layout.add_event_fragment) {
+    private val binding: AddEventFragmentBinding by viewBinding()
     private val eventsViewModel: EventsViewModel by sharedViewModel()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViews()
-        onClick()
-        updateEvent()
-        timeDetailEditor()
-        dateDetailEditor()
+        dateEditor()
+        timeEditor()
+        bindViews()
+        currentNavigation()
     }
 
-    private fun initViews() {
-        val eventUI = arguments.eventUI
-        with(binding) {
-            currentEventName.setText(eventUI.name)
-            currentDescription.setText(eventUI.description)
-        }
-        detailEventNavigation()
-    }
-
-    private fun dateDetailEditor() {
+    private fun dateEditor() {
         with(binding) {
             val calendar: Calendar = Calendar.getInstance()
-            currentDate.text = arguments.eventUI.date
+            addDate.setText(SimpleDateFormat("dd MMMM yyyy г.", Locale("ru")).format(System.currentTimeMillis()))
             val onDateClicked =
                 DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                     calendar.set(Calendar.YEAR, year)
                     calendar.set(Calendar.MONTH, monthOfYear)
                     calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    currentDate.text = SimpleDateFormat("dd MMMM yyyy г.", Locale("ru")).format(calendar.time)
+                    addDate.setText(SimpleDateFormat("dd MMMM yyyy г.", Locale("ru")).format(calendar.time))
                 }
 
-            currentDate.setOnClickListener {
+            addDate.setOnClickListener {
                 context?.let {
                     DatePickerDialog(
                         it,
@@ -74,18 +63,15 @@ class EventsDetailFragment : Fragment(R.layout.events_detail_fragment) {
     private fun Calendar.formatTime(pattern: String): String =
         SimpleDateFormat(pattern, Locale("ru")).format(time)
 
-    private fun timeDetailEditor() {
+    private fun timeEditor() {
         with(binding) {
             val calendar: Calendar = Calendar.getInstance()
-            detailsDateStart.text = arguments.eventUI.timeStart
-            detailsDateFinish.text = arguments.eventUI.timeFinish
+            val formattedTime = SimpleDateFormat("HH:mm", Locale("ru")).format(calendar.time)
             val endTime = Calendar.getInstance()
-
             val updateFieldsTime: (Calendar, Calendar) -> Unit = { startCalendar, endCalendar ->
-                detailsDateStart.text = startCalendar.formatTime("HH:mm")
-                detailsDateFinish.text = endCalendar.formatTime("HH:mm")
+                addFirstTime.setText(startCalendar.formatTime("HH:mm"))
+                addLastTime.setText(endCalendar.formatTime("HH:mm"))
             }
-
             val onTimeStartClicked = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
                 calendar.set(Calendar.HOUR_OF_DAY, hour)
                 calendar.set(Calendar.MINUTE, minute)
@@ -94,21 +80,21 @@ class EventsDetailFragment : Fragment(R.layout.events_detail_fragment) {
                 endTime.set(Calendar.MINUTE, 0)
                 updateFieldsTime(calendar, endTime)
             }
-
             val onTimeFinishClicked = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
                 val newEndTime = Calendar.getInstance().apply {
                     set(Calendar.HOUR_OF_DAY, hour)
                     set(Calendar.MINUTE, minute)
                 }
                 if (newEndTime <= calendar) {
-                    detailsDateFinish.text = endTime.formatTime("HH:mm")
+                    addLastTime.setText(endTime.formatTime("HH:mm"))
                     Toast.makeText(context, R.string.notificationFirst, Toast.LENGTH_SHORT).show()
                 } else {
-                    detailsDateFinish.text = newEndTime.formatTime("HH:mm")
+                    addLastTime.setText(newEndTime.formatTime("HH:mm"))
                 }
             }
-
-            detailsDateStart.setOnClickListener {
+            addFirstTime.setText(formattedTime)
+            addLastTime.setText(formattedTime)
+            addFirstTime.setOnClickListener {
                 TimePickerDialog(
                     context,
                     AlertDialog.THEME_HOLO_LIGHT,
@@ -118,8 +104,7 @@ class EventsDetailFragment : Fragment(R.layout.events_detail_fragment) {
                     true
                 ).show()
             }
-
-            detailsDateFinish.setOnClickListener {
+            addLastTime.setOnClickListener {
                 TimePickerDialog(
                     context,
                     AlertDialog.THEME_HOLO_LIGHT,
@@ -132,56 +117,54 @@ class EventsDetailFragment : Fragment(R.layout.events_detail_fragment) {
         }
     }
 
-    private fun onClick() {
+    private fun bindViews() {
         with(binding) {
-            refactorEvent.setOnClickListener {
-                eventsViewModel.onMarkClicked()
+            val event = EventUI(
+                id = "",
+                timeStart = addFirstTime.text.toString(),
+                timeFinish = addLastTime.text.toString(),
+                date = addDate.text.toString(),
+                name = addEventName.text.toString(),
+                description = addEventDescription.text.toString()
+            )
+
+            addFirstTime.doOnTextChanged { timeStart, _, _, _ ->
+                event.timeStart = timeStart.toString()
             }
 
-            revert.setOnClickListener {
+            addLastTime.doOnTextChanged { timeFinish, _, _, _ ->
+                event.timeFinish = timeFinish.toString()
+            }
+
+            addDate.doOnTextChanged { date, _, _, _ ->
+                event.date = date.toString()
+            }
+
+            addEventName.doOnTextChanged { titleText, _, _, _ ->
+                event.name = titleText.toString()
+            }
+
+            addEventDescription.doOnTextChanged { descriptionText, _, _, _ ->
+                event.description = descriptionText.toString()
+            }
+
+            btnAddEvent.setOnClickListener {
+                val calendar: Calendar = Calendar.getInstance()
+                event.id = calendar.timeInMillis.toString()
+                if (checkingForFullnessEventUI(event)) {
+                    eventsViewModel.addEvent(event)
+                } else {
+                    Toast.makeText(context, R.string.notificationThird, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            btnBackStack.setOnClickListener {
                 eventsViewModel.backStack()
             }
-
-            deleteEvent.setOnClickListener {
-                val builder = AlertDialog.Builder(context)
-                builder.setTitle(R.string.confirm)
-                builder.setMessage(R.string.notificationSecond)
-                builder.setPositiveButton(R.string.yes) { _, _ ->
-                    eventsViewModel.onBtnDeleteClick()
-                }
-                builder.setNegativeButton(R.string.no) { dialog, _ ->
-                    dialog.dismiss()
-                }
-                builder.create().show()
-            }
         }
     }
 
-    private fun updateEvent() {
-        with(binding) {
-            currentDescription.doOnTextChanged { description, _, _, _ ->
-                eventsViewModel.updateDetailDescription(description.toString())
-            }
-
-            currentEventName.doOnTextChanged { name, _, _, _ ->
-                eventsViewModel.updateDetailTitleTask(name.toString())
-            }
-
-            detailsDateStart.doOnTextChanged { startTime, _, _, _ ->
-                eventsViewModel.updateStartTime(startTime.toString())
-            }
-
-            detailsDateFinish.doOnTextChanged { endTime, _, _, _ ->
-                eventsViewModel.updateEndTime(endTime.toString())
-            }
-
-            currentDate.doOnTextChanged { date, _, _, _ ->
-                eventsViewModel.updateDate(date.toString())
-            }
-        }
-    }
-
-    private fun detailEventNavigation() {
+    private fun currentNavigation() {
         viewLifecycleOwner.launchRepeatedly {
             eventsViewModel.navigationItem.onEach { item ->
                 when (item) {
@@ -190,5 +173,13 @@ class EventsDetailFragment : Fragment(R.layout.events_detail_fragment) {
                 }
             }.launchIn(this)
         }
+    }
+
+    private fun checkingForFullnessEventUI(eventUI: EventUI): Boolean {
+        return eventUI.timeStart.isNotBlank() &&
+            eventUI.timeFinish.isNotBlank() &&
+            eventUI.name.isNotBlank() &&
+            eventUI.description.isNotBlank() &&
+            eventUI.date.isNotBlank()
     }
 }

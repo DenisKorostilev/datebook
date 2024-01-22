@@ -1,14 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <FrameLayout
-        android:id="@+id/appBar"
+        android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/purple"
-        android:orientation="horizontal"
         android:padding="@dimen/padding10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,12 +18,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/event"
+            android:text="@string/mainTitleText"
             android:textSize="@dimen/textSize20"
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/revert"
+            android:id="@+id/btnBackStack"
             android:layout_width="@dimen/margin30"
             android:layout_height="@dimen/margin40"
             android:layout_gravity="top|start"
@@ -31,7 +31,7 @@
             android:drawableBottom="@drawable/revert" />
 
         <Button
-            android:id="@+id/refactorEvent"
+            android:id="@+id/btnAddEvent"
             android:layout_width="@dimen/margin30"
             android:layout_height="@dimen/margin40"
             android:layout_gravity="top|end"
@@ -39,24 +39,50 @@
             android:drawableBottom="@drawable/mark" />
     </FrameLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/boxTitle"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+    <EditText
+        android:id="@+id/addEventName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="5dp"
+        android:hint="@string/titleText"
+        android:textSize="@dimen/textSize16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBar">
+        app:layout_constraintTop_toBottomOf="@id/topBar" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/currentEventName"
-            android:layout_width="match_parent"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linearDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/separator"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addEventName">
+
+        <TextView
+            android:id="@+id/titleDateStart"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/titleTask"
-            android:inputType="textCapSentences"
+            android:layout_weight="0.2"
+            android:gravity="center"
+            android:text="@string/dateText"
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSize16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/addEventName" />
+
+        <EditText
+            android:id="@+id/addDate"
+            android:layout_width="@dimen/width0"
+            android:layout_height="wrap_content"
+            android:layout_weight="@dimen/weight4"
+            android:backgroundTint="@color/white"
+            android:focusable="false"
+            android:textColor="@color/black"
             android:textSize="@dimen/textSize16" />
-    </com.google.android.material.textfield.TextInputLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linearTitleTime"
@@ -96,7 +122,7 @@
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/linearDate"
+        android:id="@+id/linearTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/separator"
@@ -104,77 +130,38 @@
         android:padding="@dimen/padding10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/boxTitle">
+        app:layout_constraintTop_toBottomOf="@id/linearTitleTime">
 
-        <TextView
-            android:id="@+id/titleDateStart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.2"
-            android:gravity="center"
-            android:text="@string/dateText"
-            android:textColor="@color/black"
-            android:textSize="@dimen/textSize16"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/addEventName" />
-
-        <TextView
-            android:id="@+id/currentDate"
+        <EditText
+            android:id="@+id/addFirstTime"
             android:layout_width="@dimen/width0"
             android:layout_height="wrap_content"
             android:layout_weight="@dimen/weight4"
+            android:backgroundTint="@color/white"
+            android:focusable="false"
             android:gravity="center"
-            android:textSize="@dimen/textSize16"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/boxTitle" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSize16" />
+
+        <EditText
+            android:id="@+id/addLastTime"
+            android:layout_width="@dimen/width0"
+            android:layout_height="wrap_content"
+            android:layout_weight="@dimen/weight4"
+            android:backgroundTint="@color/white"
+            android:focusable="false"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSize16" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <TextView
-        android:id="@+id/detailsDateStart"
-        android:layout_width="@dimen/margin205"
-        android:layout_height="@dimen/margin48"
-        android:gravity="center"
-        android:textSize="@dimen/textSize16"
-        app:layout_constraintEnd_toStartOf="@+id/detailsDateFinish"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearTitleTime" />
-
-    <TextView
-        android:id="@+id/detailsDateFinish"
-        android:layout_width="@dimen/margin205"
-        android:layout_height="@dimen/margin48"
-        android:gravity="center"
-        android:textSize="@dimen/textSize16"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearTitleTime" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/boxDescription"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+    <EditText
+        android:id="@+id/addEventDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="@string/descriptionText"
+        android:textSize="@dimen/textSize16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/detailsDateFinish">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/currentDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/description"
-            android:textSize="@dimen/textSize16" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/deleteEvent"
-        android:layout_width="60dp"
-        android:layout_height="75dp"
-        android:layout_marginEnd="@dimen/margin16"
-        android:layout_marginBottom="@dimen/margin16"
-        android:backgroundTint="@color/white"
-        android:drawableBottom="@drawable/delete"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/linearTime" />
 </androidx.constraintlayout.widget.ConstraintLayout>
