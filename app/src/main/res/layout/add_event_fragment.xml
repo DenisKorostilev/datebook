@@ -39,15 +39,23 @@
             android:drawableBottom="@drawable/mark" />
     </FrameLayout>
 
-    <EditText
-        android:id="@+id/addEventName"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/boxTitle"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/titleText"
-        android:textSize="@dimen/textSize16"
+        android:paddingTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topBar" />
+        app:layout_constraintTop_toBottomOf="@id/topBar">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/addEventName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/titleTask"
+            android:textSize="@dimen/textSize16" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linearDate"
@@ -58,7 +66,7 @@
         android:padding="@dimen/padding10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/addEventName">
+        app:layout_constraintTop_toBottomOf="@id/boxTitle">
 
         <TextView
             android:id="@+id/titleDateStart"
@@ -155,13 +163,20 @@
             android:textSize="@dimen/textSize16" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <EditText
-        android:id="@+id/addEventDescription"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/boxDescription"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/descriptionText"
-        android:textSize="@dimen/textSize16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearTime" />
+        app:layout_constraintTop_toBottomOf="@id/linearTime">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/addEventDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/description"
+            android:textSize="@dimen/textSize16" />
+    </com.google.android.material.textfield.TextInputLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
