@@ -13,8 +13,9 @@ class EventMapper : BaseMapper<Event, EventUI> {
         val dateFinishFormatted = from.dateFinish.toJavaLocalDateTime().format(dateTimeFormatter)
         return EventUI(
             id = from.id,
-            dateStart = dateStartFormatted,
-            dateFinish = dateFinishFormatted,
+            timeStart = dateStartFormatted,
+            timeFinish = dateFinishFormatted,
+            date = from.date,
             name = from.name,
             description = from.description
         )

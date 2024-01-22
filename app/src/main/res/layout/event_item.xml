@@ -1,52 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/separator"
-    android:orientation="horizontal"
     android:padding="15dp"
-    android:clickable="true"
-    android:focusable="true"
     app:cardCornerRadius="12dp">
 
     <TextView
+        android:id="@+id/date"
+        android:layout_width="@dimen/margin168"
+        android:layout_height="@dimen/margin21"
+        android:textSize="@dimen/textSize16"
+        android:gravity="center"
+        android:text="@string/currentDate"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/linearDateTime"
+        app:layout_constraintRight_toRightOf="@id/linearDateTime" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linearDateTime"
+        android:layout_width="@dimen/margin168"
+        android:layout_height="@dimen/margin21"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/name"
+        app:layout_constraintTop_toBottomOf="@id/date">
+
+        <TextView
+            android:id="@+id/dateStart"
+            android:layout_width="@dimen/margin50"
+            android:layout_height="@dimen/margin21"
+            android:layout_weight="@dimen/weight3"
+            android:gravity="center"
+            android:text="@string/dateStart"
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSize16" />
+
+        <TextView
+            android:id="@+id/dash"
+            android:layout_width="@dimen/margin21"
+            android:layout_height="@dimen/margin21"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:text="@string/dash"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/dateFinish"
+            android:layout_width="@dimen/margin50"
+            android:layout_height="@dimen/margin21"
+            android:layout_weight="@dimen/weight3"
+            android:gravity="center"
+            android:text="@string/dateFinish"
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSize16" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <TextView
         android:id="@+id/name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_width="@dimen/margin168"
+        android:layout_height="@dimen/margin40"
         android:gravity="center"
         android:text="@string/mainText"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="@dimen/textSize16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/dateStart"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.4"
-        android:gravity="center"
-        android:text="@string/dateStart"
-        android:textColor="@color/black"
-        android:textSize="16sp" />
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.1"
-        android:gravity="center"
-        android:text="@string/dash"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/dateFinish"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.4"
-        android:gravity="center"
-        android:text="@string/dateFinish"
-        android:textColor="@color/black"
-        android:textSize="16sp" />
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

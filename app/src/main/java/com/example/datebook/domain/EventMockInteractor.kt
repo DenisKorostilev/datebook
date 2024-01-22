@@ -7,8 +7,8 @@ class EventMockInteractor(
     private val eventRepository: EventRepository,
     private val localRepository: LocalRepository
 ) : EventInteractor {
-    override suspend fun getEventsData(): NetworkResult<List<Event>> {
-        val events = localRepository.readEvents()
+    override suspend fun getEventsData(date: String): NetworkResult<List<Event>> {
+        val events = localRepository.readEvents(date)
         return if (events.isEmpty()) { // если детали события отсутствуют локально, идем в сеть
             val result = eventRepository.getEventsData()
             if (result is NetworkResult.Success) { // в случае успеха кэшируем данные локально

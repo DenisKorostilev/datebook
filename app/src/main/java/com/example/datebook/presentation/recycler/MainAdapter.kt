@@ -9,6 +9,6 @@ class MainAdapter(
 
     init {
         delegatesManager
-            .addDelegate(MainDelegates.eventsItemsDelegates(clickListener))
+            .addDelegate(MainDelegates.eventItemsDelegates(clickListener))
     }
 }

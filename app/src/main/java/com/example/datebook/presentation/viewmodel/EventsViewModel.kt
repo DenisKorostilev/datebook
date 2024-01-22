@@ -14,9 +14,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toJavaLocalDateTime
+import kotlinx.datetime.toLocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 sealed interface NavigationEvent {
-    data class Details(val eventUI: EventUI, val date: Long) : NavigationEvent
+    data class Details(val eventUI: EventUI) : NavigationEvent
     data object Back : NavigationEvent
 }
 
@@ -39,57 +45,120 @@ class EventsViewModel(
     private val _currentEvent: MutableStateFlow<EventUI?> = MutableStateFlow(null)
 
     init {
-        receiveEvents()
+        val date = Instant.fromEpochMilliseconds(_currentDate.value).toLocalDateTime(
+            TimeZone.UTC
+        ).toJavaLocalDateTime().format(DateTimeFormatter.ofPattern("dd MMMM yyyy г.", Locale("ru")))
+        receiveEvents(date)
     }
 
-    fun receiveEvents() {
+    private fun receiveEvents(date: String) {
         _currentEvents.value = emptyList()
         viewModelScope.launch {
-            when (val networkResult = eventsInteractor.getEventsData()) {
+            when (val networkResult = eventsInteractor.getEventsData(date)) {
                 is NetworkResult.Success -> {
                     allEvents = networkResult.result.map { mapper.map(it) }
                     _currentEvents.value = allEvents
                 }
-
                 is NetworkResult.Error -> {}
             }
         }
     }
 
-    fun onMarkClicked() {
-        val currentEvent = _currentEvent.value
-        val currentEvents = _currentEvents.value
-        val changedEvents = currentEvents.map { event ->
-            if (event.id == currentEvent?.id) {
-                currentEvent
-            } else {
-                event
-            }
-        }
-        _currentEvent.value = null
-        _currentEvents.value = changedEvents
+    fun onBtnDeleteClick() {
         viewModelScope.launch {
-            _navigationItem.emit(NavigationEvent.Back)
-            localRepositoryImpl.updateEvents(changedEvents)
+            val currentEvent = _currentEvent.value
+            currentEvent?.let {
+                localRepositoryImpl.deleteEvent(currentEvent)
+                receiveEvents(currentEvent.date)
+                _navigationItem.emit(NavigationEvent.Back)
+            }
         }
     }
 
     fun onEventClicked(eventUI: EventUI) {
         viewModelScope.launch {
-            _navigationItem.emit(NavigationEvent.Details(eventUI, _currentDate.value))
+            _navigationItem.emit(NavigationEvent.Details(eventUI))
             _currentEvent.value = eventUI
+        }
+    }
+
+    fun backStack() {
+        viewModelScope.launch {
+            _navigationItem.emit(NavigationEvent.Back)
+        }
+    }
+
+    fun onMarkClicked() {
+        val dateString = Instant.fromEpochMilliseconds(_currentDate.value).toLocalDateTime(
+            TimeZone.UTC
+        ).toJavaLocalDateTime().format(DateTimeFormatter.ofPattern("dd MMMM yyyy г.", Locale("ru")))
+        viewModelScope.launch {
+            val currentEvent = _currentEvent.value
+            val currentEvents = _currentEvents.value
+            val changedEvents = currentEvents.map { event ->
+                if (event.id == currentEvent?.id) {
+                    currentEvent
+                } else {
+                    event
+                }
+            }
+            _currentEvent.value = null
+            _currentEvents.value = changedEvents
+            _navigationItem.emit(NavigationEvent.Back)
+            localRepositoryImpl.updateEvents(changedEvents)
+            receiveEvents(dateString)
+        }
+    }
+
+    fun addEvent(event: EventUI) {
+        _currentEvent.value = event
+        val dateString = Instant.fromEpochMilliseconds(_currentDate.value).toLocalDateTime(
+            TimeZone.UTC
+        ).toJavaLocalDateTime().format(DateTimeFormatter.ofPattern("dd MMMM yyyy г.", Locale("ru")))
+        viewModelScope.launch {
+            event.let {
+                val currentEvent = _currentEvent.value
+                val currentEvents = _currentEvents.value
+                val changedEvents = currentEvents.map { event ->
+                    if (event.id == currentEvent?.id) {
+                        currentEvent
+                    } else {
+                        event
+                    }
+                }
+                _currentEvents.value = changedEvents
+            }
+            localRepositoryImpl.addEvent(event)
+            receiveEvents(dateString)
+            backStack()
         }
     }
 
     fun setCurrentDate(date: Long) {
         _currentDate.value = date
+        val dateString = Instant.fromEpochMilliseconds(_currentDate.value).toLocalDateTime(
+            TimeZone.UTC
+        ).toJavaLocalDateTime().format(DateTimeFormatter.ofPattern("dd MMMM yyyy г.", Locale("ru")))
+        receiveEvents(dateString)
     }
 
-    fun updateTitleText(text: String) {
-        _currentEvent.value = _currentEvent.value?.copy(name = text)
+    fun updateDetailTitleTask(textName: String) {
+        _currentEvent.value = _currentEvent.value?.copy(name = textName)
     }
 
-    fun updateDescription(text: String) {
-        _currentEvent.value = _currentEvent.value?.copy(description = text)
+    fun updateDate(date: String) {
+        _currentEvent.value = _currentEvent.value?.copy(date = date)
+    }
+
+    fun updateStartTime(startTime: String) {
+        _currentEvent.value = _currentEvent.value?.copy(timeStart = startTime)
+    }
+
+    fun updateEndTime(endTime: String) {
+        _currentEvent.value = _currentEvent.value?.copy(timeFinish = endTime)
+    }
+
+    fun updateDetailDescription(textDescription: String) {
+        _currentEvent.value = _currentEvent.value?.copy(description = textDescription)
     }
 }

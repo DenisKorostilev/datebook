@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin16">16dp</dimen>
+    <dimen name="margin21">21dp</dimen>
+    <dimen name="margin30">30dp</dimen>
+    <dimen name="margin40">40dp</dimen>
+    <dimen name="margin48">48dp</dimen>
+    <dimen name="margin50">50dp</dimen>
+    <dimen name="margin168">168dp</dimen>
+    <dimen name="margin205">205dp</dimen>
+    <dimen name="padding10">10dp</dimen>
+    <dimen name="textSize16">16sp</dimen>
+    <dimen name="textSize20">20sp</dimen>
+    <dimen name="weight3">0.3</dimen>
+    <dimen name="weight4">0.4</dimen>
+    <dimen name="weight5">0.5</dimen>
+    <dimen name="weight1">1</dimen>
+    <dimen name="width0">0dp</dimen>
+</resources>
